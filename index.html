@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Course Learning Platform</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Plyr.js CSS -->
+  <link href="https://cdn.plyr.io/3.6.2/plyr.css" rel="stylesheet">
+  <!-- Custom CSS -->
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #1a1a1a; /* Dark background */
+      color: #fff;
+      overflow-x: hidden; /* Hide horizontal scrollbar */
+    }
+
+    h2 {
+      color: #4caf50; /* Green heading */
+    }
+
+    .list-group-item {
+      cursor: pointer;
+      background-color: #333; /* Dark gray background */
+      border-color: #333;
+      color: #fff;
+      transition: background-color 0.3s ease;
+    }
+
+    .list-group-item:hover {
+      background-color: #4caf50; /* Green hover */
+      border-color: #4caf50;
+    }
+
+    #sections-list-container {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background-color: #333; /* Dark gray background */
+      padding: 10px;
+      border-right: 1px solid #4caf50; /* Green border */
+      max-height: calc(100vh - 20px);
+      overflow-y: auto; /* Add vertical scrollbar if needed */
+    }
+
+    #section-content {
+      background-color: #333; /* Dark gray background */
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 0.5s ease-in-out;
+      margin-left: 10px; /* Add margin to avoid overlap with sticky section */
+    }
+
+    .subsection-container {
+      border-bottom: 1px solid #4caf50; /* Green border */
+      padding-bottom: 20px;
+      margin-bottom: 20px;
+      animation: slideInFromLeft 1s ease both, fadeInUp 1s ease both;
+    }
+
+    .subsection-container:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+      margin-bottom: 0;
+    }
+
+    .subsection-container-header {
+      cursor: move;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    /* Additional animations */
+    @keyframes slideInFromLeft {
+      from {
+        transform: translateX(-100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideInFromRight {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        transform: translateY(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeInDown {
+      from {
+        transform: translateY(-100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeInLeft {
+      from {
+        transform: translateX(-100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeInRight {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    /* Swirl Cursor Effect */
+    .custom-cursor {
+      position: fixed;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.5);
+      mix-blend-mode: difference;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      animation: swirlCursor 3s infinite linear;
+    }
+
+    @keyframes swirlCursor {
+      0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+      }
+      100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-info sticky-top">
+    <a class="navbar-brand" href="#">Coding-Geta</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <!-- Sections will be dynamically added here -->
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container-fluid shadow">
+    <div class="row">
+      <div class="col-lg-3 col-md-4 bg-info p-4 d-none d-md-block" id="sections-list-container">
+        <h2 class="text-white">Coding-Geta</h2>
+        <ul id="sections-list" class="list-group">
+          <!-- Sections will be dynamically added here -->
+        </ul>
+      </div>
+      <div class="col-lg-9 col-md-8">
+        <div id="section-content" class="p-4">
+          <!-- Section content will be dynamically loaded here -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Swirl Cursor Effect -->
+  <div class="custom-cursor"></div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <!-- Plyr.js -->
+  <script src="https://cdn.plyr.io/3.6.2/plyr.polyfilled.js"></script>
+  <!-- Custom JavaScript -->
+  <script>
+    // Sample data for sections and subsections
+    const sections = [
+      {
+        title: "HTML",
+        subsections: [
+          { title: "HTML Basics", content: "HTML basics content goes here.", videoUrl: "https://example.com/html_basics.mp4" },
+          { title: "HTML Tables", content: "HTML tables content goes here.", videoUrl: "https://example.com/html_tables.mp4" },
+          { title: "HTML Forms", content: "HTML forms content goes here.", videoUrl: "https://example.com/html_forms.mp4" },
+          { title: "HTML Elements", content: "HTML elements content goes here.", videoUrl: "https://example.com/html_elements.mp4" },
+          { title: "HTML Attributes", content: "HTML attributes content goes here.", videoUrl: "https://example.com/html_attributes.mp4" }
+          // Add more subsections as needed
+        ]
+      },
+      {
+        title: "CSS",
+        subsections: [
+          { title: "CSS Advanced", content: "CSS advanced content goes here.", videoUrl: "https://example.com/css_advanced.mp4" },
+          { title: "CSS Responsive", content: "CSS responsive content goes here.", videoUrl: "https://example.com/css_responsive.mp4" },
+          { title: "CSS Grid", content: "CSS grid content goes here.", videoUrl: "https://example.com/css_grid.mp4" }
+          // Add more subsections as needed
+        ]
+      },
+      {
+        title: "JavaScript",
+        subsections: [
+          { title: "JS Versions", content: "JavaScript versions content goes here.", videoUrl: "https://example.com/js_versions.mp4" },
+          { title: "JS Objects", content: "JavaScript objects content goes here.", videoUrl: "https://example.com/js_objects.mp4" },
+          { title: "JS Functions", content: "JavaScript functions content goes here.", videoUrl: "https://example.com/js_functions.mp4" },
+          { title: "JS Classes", content: "JavaScript classes content goes here.", videoUrl: "https://example.com/js_classes.mp4" },
+          { title: "JS Async", content: "JavaScript async content goes here.", videoUrl: "https://example.com/js_async.mp4" }
+          // Add more subsections as needed
+        ]
+      },
+      {
+        title: "Bootstrap",
+        subsections: [
+          { title: "Learn Bootstrap 3", content: "Bootstrap 3 content goes here.", videoUrl: "https://example.com/bootstrap3.mp4" },
+          { title: "Bootstrap 4", content: "Bootstrap 4 content goes here.", videoUrl: "https://example.com/bootstrap4.mp4" }
+          // Add more subsections as needed
+        ]
+      },
+      {
+        title: "Java",
+        subsections: [
+          { title: "Java Methods", content: "Java methods content goes here.", videoUrl: "https://example.com/java_methods.mp4" },
+          { title: "Java Classes", content: "Java classes content goes here.", videoUrl: "https://example.com/java_classes.mp4" },
+          { title: "Java File Handling", content: "Java file handling content goes here.", videoUrl: "https://example.com/java_file_handling.mp4" },
+          { title: "Java Reference", content: "Java reference content goes here.", videoUrl: "https://example.com/java_reference.mp4" }
+          // Add more subsections as needed
+        ]
+      },
+      {
+        title: "Angular",
+        subsections: [
+          { title: "Angular Modules", content: "Angular modules content goes here.", videoUrl: "https://example.com/angular_modules.mp4" },
+          { title: "Angular Directives", content: "Angular directives content goes here.", videoUrl: "https://example.com/angular_directives.mp4" },
+          { title: "Angular Data Binding", content: "Angular data binding content goes here.", videoUrl: "https://example.com/angular_data_binding.mp4" },
+          { title: "Angular Services", content: "Angular services content goes here.", videoUrl: "https://example.com/angular_services.mp4" }
+          // Add more subsections as needed
+        ]
+      },
+      // Add more sections as needed
+    ];
+
+    // Function to dynamically generate sections list
+    function generateSectionsList() {
+      const sectionsList = $(".navbar-nav");
+      sectionsList.empty();
+      sections.forEach((section, index) => {
+        const listItem = $("<li>").addClass("nav-item");
+        const link = $("<a>").addClass("nav-link").text(section.title).attr("href", "#");
+        link.on("click", () => loadSectionContent(index));
+        listItem.append(link);
+        sectionsList.append(listItem);
+      });
+    }
+
+    // Function to dynamically load section content
+    function loadSectionContent(index) {
+      const sectionContent = $("#section-content");
+      const section = sections[index];
+      sectionContent.empty();
+      sectionContent.append($("<h2>").text(section.title));
+      section.subsections.forEach(subsection => {
+        const subsectionContainer = $("<div>").addClass("subsection-container mt-3 p-3");
+        const subsectionHeader = $("<div>").addClass("subsection-container-header").text(subsection.title);
+        const subsectionContent = $("<p>").text(subsection.content);
+        // Add Plyr video player
+        const videoPlayer = $("<video>").attr("controls", true).addClass("plyr");
+        videoPlayer.append($("<source>").attr("src", subsection.videoUrl));
+        subsectionContainer.append(subsectionHeader, subsectionContent, videoPlayer);
+        sectionContent.append(subsectionContainer);
+      });
+      // Initialize Plyr players
+      const players = Array.from(document.querySelectorAll(".plyr"));
+      players.forEach(player => new Plyr(player));
+      // Make subsections draggable
+      makeSubsectionsDraggable();
+    }
+
+    // Function to make subsections draggable
+    function makeSubsectionsDraggable() {
+      $(".subsection-container").draggable({
+        containment: "#section-content",
+        scroll: false,
+        snap: "#section-content",
+        snapMode: "inner"
+      });
+    }
+
+    // Initial setup
+    $(document).ready(() => {
+      generateSectionsList();
+      loadSectionContent(0); // Load the first section by default
+    });
+  </script>
+</body>
+</html>
